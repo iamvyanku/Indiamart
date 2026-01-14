@@ -53,8 +53,21 @@ def indiamart_webhook():
 
 # if __name__ == "__main__":
 #     app.run(port=5000)
+from flask import send_file
+
+@app.route("/download/csv", methods=["GET"])
+def download_csv():
+    if not os.path.exists("indiamart_leads.csv"):
+        return jsonify({"error": "CSV file not found"}), 404
+
+    return send_file(
+        "indiamart_leads.csv",
+        as_attachment=True,
+        download_name="indiamart_leads.csv"
+    )
 
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
+
